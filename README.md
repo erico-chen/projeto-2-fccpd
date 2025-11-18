@@ -29,24 +29,20 @@ Desafio 5 — Microsserviços com API Gateway
 Integração dos microsserviços por meio de um gateway central, responsável por roteamento, padronização e unificação da comunicação.
 
 ## 📁 Estrutura do Projeto
+
+```
 .
-<br>
 ├── desafio1
-<br>
 ├── desafio2
-<br>
 ├── desafio3
-<br>
 ├── desafio4
-<br>
-├── desafio5
-<br>
-└── README.md
+└── desafio5
+```
 
 
 ## Como executar o projeto
 ### 1. Clone o repositório
-```bash
+``` bash
 git clone https://github.com/erico-chen/projeto-2-fccpd.git
 ```
 
@@ -54,8 +50,52 @@ git clone https://github.com/erico-chen/projeto-2-fccpd.git
 <details closed>
 <summary>Desafio 1</summary>
 <br>
-  
-```bash
+
+## 🛠️ Execução do Desafio
+### 2.1 Vá para o diretório do desafio
+``` bash
 cd desafio1
 ```
+### 2.2 Crie a rede Docker
+``` bash
+docker network create [SEU_NOME_REDE]
+```
+
+### 2.3 Faça o build das imagens
+``` bash
+docker build -t [SUA_TAG_IMAGEM] -f Dockerfile.server .
+docker build -t [SUA_TAG_IMAGEM] -f Dockerfile.client .
+```
+
+### 2.4 Rode o Servidor
+``` bash
+docker run -d --name [SEU_NOME_CONTAINER_SERVIDOR] --network [SEU_NOME_REDE] -p 8080:8080 [SUA_TAG_IMAGEM]
+```
+
+### 2.5 Rode o Cliente
+``` bash
+docker run -d --name [SEU_NOME_CONTAINER_CLIENTE] --network [SEU_NOME_REDE] [SUA_TAG_IMAGEM]
+```
+
+### 2.6 Visualize os logs dos Containers
+``` bash
+docker logs -f [SEU_NOME_CONTAINER_CLIENTE]
+docker logs -f [SEU_NOME_CONTAINER_SERVIDOR]
+```
+
+### 2.7 Verifique os Containers conectados a rede criada
+``` bash
+docker network inspect [SEU_NOME_REDE]
+```
+
+### 2.8 Resultados Esperados:
+<br>
+<img width="1319" alt="containers-logs" src="https://github.com/user-attachments/assets/3b84fa1b-c28d-4460-b063-0a066871d812">
+<br>
+<img width="1319" alt="rede-inspecionado" src="https://github.com/user-attachments/assets/410742fa-d78f-4f96-9578-3a457e2ff9f3">
+<br>
+
 </details>
+
+
+
