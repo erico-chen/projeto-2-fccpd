@@ -1,0 +1,49 @@
+version: "3.9"
+
+services:
+  db:
+    image: postgres:16
+    container_name: desafio3_db
+    environment:
+      POSTGRES_USER: cesar
+      POSTGRES_PASSWORD: school
+      POSTGRES_DB: desafio_3_db
+    volumes:
+      - desafio3_pgdata:/var/lib/postgresql/data
+    networks:
+      - desafio3_net
+
+  cache:
+    image: redis:7
+    container_name: desafio3_cache
+    networks:
+      - desafio3_net
+
+  web:
+    build: ./web
+    container_name: desafio3_web
+    depends_on:
+      - db
+      - cache
+    environment:
+      
+      DB_HOST: db
+      DB_PORT: 5432
+      DB_NAME: desafio_3_db
+      DB_USER: cesar
+      DB_PASSWORD: school
+
+      REDIS_HOST: cache
+      REDIS_PORT: 6379
+    ports:
+      - "8080:8080"
+    networks:
+      - desafio3_net
+
+volumes:
+  desafio3_pgdata:
+
+networks:
+  desafio3_net:
+    driver: bridge
+
