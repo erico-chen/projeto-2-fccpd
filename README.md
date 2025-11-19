@@ -171,5 +171,43 @@ Você deverá ver os mesmos registros.
 
 </details>
 
+<details closed>
+<summary>Desafio 3</summary>
+<br>
+    
+## 🧱 Arquitetura proposta (web + db + cache)
+
+Serviços:
+
+- Web: aplicação Flask em Python.
+
+    - Lê/escreve no PostgreSQL.
+
+    - Usa Redis como cache simples.
+
+- DB: PostgreSQL.
+
+- Cache: Redis.
+
+Comunicação:
+
+- A web fala com db via postgresql://…@db:5432/...
+
+- A web fala com cache via redis://cache:6379/0
+
+- Tudo em uma rede interna criada automaticamente pelo docker-compose.
+
+
+## 🛠️ Execução do Desafio
+### 2.3.1 Vá para o diretório do desafio
+``` bash
+cd desafio3
+```
+### 2.3.2 Suba os containers com Docker Compose
+``` bash
+docker compose up --build
+```
+
+</details>
 
 
