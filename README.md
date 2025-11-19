@@ -252,4 +252,116 @@ docker compose down
 ```
 </details>
 
+<details closed>
+<summary>Desafio 4</summary>
+<br>
+    
+## 🧱 Arquitetura da Solução
+
+A solução foi dividida em dois microsserviços escritos em Python + Flask:
+
+### Microsserviço A — Provedor de Dados
+- Expõe um endpoint HTTP que retorna uma lista de usuários em formato JSON.
+
+- É responsável por fornecer a “base de dados” que o serviço B irá consumir.
+
+- Porta interna: 5008
+
+- Porta exposta no host: 5010 → 5008
+
+### Microsserviço B — Consumidor / Agregador
+
+- Faz requisições HTTP para o serviço A usando seu nome DNS dentro da rede Docker.
+
+- Processa as informações recebidas e retorna mensagens combinadas:
+
+        “Usuário X ativo desde Y”
+
+- Porta: 5001
+
+### Comunicação:
+
+A comunicação entre serviços ocorre na rede interna do Docker Compose:
+```
+service_b → http://servico_a:5008/users
+```
+
+### Cada microsserviço possui:
+
+- Seu próprio código
+
+- Seu próprio Dockerfile
+
+- Suas dependências isoladas
+
+## Detalhes de Implementação
+
+### Microsserviço A
+Retorna a lista de usuários:
+
+<b>Endpoint</b>:
+```
+GET /users
+```
+
+<b>Saída esperada</b>:
+```
+[
+  {"id": 1, "nome": "Gabi", "ativo_desde": "2021-01-01"},
+  {"id": 2, "nome": "Jorge", "ativo_desde": "2022-03-15"},
+  {"id": 3, "nome": "Saulo", "ativo_desde": "2023-07-10"}
+]
+```
+
+### Microsserviço B
+Consome o Servico A por HTTP usando o nome do container:
+
+```
+http://servico_a:5008/users
+```
+
+<b>Endpoint</b>:
+```
+GET /users-detalhado
+```
+
+<b>Saída esperada</b>:
+```
+{
+  "origem": "service-b",
+  "mensagens": [
+    "Usuário Ana ativo desde 2021-01-01",
+    "Usuário Bruno ativo desde 2022-03-15",
+    "Usuário Carla ativo desde 2023-07-10"
+  ]
+}
+```
+
+## 🛠️ Execução do Desafio
+### 2.4.1 Vá para o diretório do desafio
+``` bash
+cd desafio4
+```
+### 2.4.2 Suba os containers com Docker Compose
+``` bash
+docker compose up --build
+```
+
+### 2.4.3 Teste Microsserviço A
+Acesse: 
+```
+http://localhost:5010/users
+```
+
+### 2.4.4 Teste Microsserviço B
+Acesse: 
+```
+http://localhost:5001/users-detalhado
+```
+
+### 2.4.5 Encerre os serviços
+```
+docker compose down
+```
+</details>
 
