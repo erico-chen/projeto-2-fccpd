@@ -207,7 +207,49 @@ cd desafio3
 ``` bash
 docker compose up --build
 ```
+Isso irá subir:
 
+- desafio3_db (PostgreSQL)
+
+- desafio3_cache (Redis)
+
+- desafio3_web (Flask)
+
+A aplicação web ficará disponível em:
+```
+http://localhost:8080
+```
+### 2.3.3 Inicialize o Banco de Dados
+Acesse: 
+```
+http://localhost:8080/init-db
+```
+Isso cria a tabela acessos no banco desafio_3_db.
+
+### 2.3.4 Teste a comunicação com o Banco de Dados
+Acesse: 
+```
+http://localhost:8080/db
+```
+Cada chamada:
+
+- Insere um registro em acessos.
+- Retorna o total de registros (comprova que a web está falando com o db).
+
+### 2.3.5 Teste a comunicação com o Cache (Redis)
+Acesse: 
+```
+http://localhost:8080/cache
+```
+Cada chamada:
+
+- Incrementa a chave contador_acessos no Redis.
+- Retorna o valor atual (comprova que a web está falando com o cache).
+
+### 2.3.6 Encerre os serviços
+```
+docker compose down
+```
 </details>
 
 
