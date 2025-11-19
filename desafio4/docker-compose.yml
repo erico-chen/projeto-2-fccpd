@@ -1,0 +1,25 @@
+services:
+  servico_a:
+    build: ./servico_A
+    container_name: servico_A
+    ports:
+      - "5010:5008"
+    networks:
+      - desafio4_net
+
+  servico_b:
+    build: ./servico_B
+    container_name: servico_B
+    depends_on:
+      - servico_a
+    environment:
+      SERVICE_A_HOST: servico_A
+      SERVICE_A_PORT: 5008
+    ports:
+      - "5001:5001"
+    networks:
+      - desafio4_net
+
+networks:
+  desafio4_net:
+    driver: bridge
