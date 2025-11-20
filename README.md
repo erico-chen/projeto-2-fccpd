@@ -365,3 +365,131 @@ docker compose down
 ```
 </details>
 
+</details>
+
+<details closed>
+<summary>Desafio 5</summary>
+<br>
+
+## Objetivo
+
+Implementar uma arquitetura de microsserviços onde **uma API Gateway atua como ponto único de entrada**, roteando requisições para **dois serviços internos**:
+
+- `tenista-service`: lista tenistas.
+- `premiacao-service`: lista as premiações associadas a tenistas.
+
+## 🧱 Arquitetura da Solução
+
+A arquitetura é composta por **3 serviços**:
+
+### 1. API Gateway (`api-gateway`)
+- Único serviço exposto externamente.
+- Porta exposta no host: `8080`.
+- Responsável por receber as requisições do cliente e encaminhar para os microsserviços internos.
+- Endpoints externos:
+  - `GET /tenistas` → encaminha para `tenista-service`.
+  - `GET /premiacoes` → encaminha para `premiacao-service`.
+
+### 2. Microsserviço de Tenistas (`tenista-service`)
+- Porta interna: `5001`.
+- Não é exposto diretamente ao host, apenas para a rede interna do Docker.
+- Endpoint interno:
+  - `GET /tenistas` → retorna a lista de tenistas em JSON.
+
+### 3. Microsserviço de Premiações (`premiacao-service`)
+- Porta interna: `5002`.
+- Também não é exposto diretamente ao host.
+- Endpoint interno:
+  - `GET /premiacoes` → retorna a lista de premiações em JSON.
+
+
+### Comunicação na rede interna
+
+Todos os serviços estão na mesma rede Docker (`desafio5_net`).  
+Dentro dessa rede, o gateway acessa os serviços pelos **nomes dos containers**:
+
+- `http://tenista-service:5001/tenistas`
+- `http://premiacao-service:5002/premiacoes`
+
+Do ponto de vista do cliente externo, porém, **apenas o gateway é acessível**:
+
+- `http://localhost:8080/tenistas`
+- `http://localhost:8080/premiacoes`
+
+Isso garante o **gateway como ponto único de entrada**.
+
+### Cada microsserviço possui:
+
+- Código-fonte isolado (um arquivo Python com Flask).
+
+- Um Dockerfile próprio, com suas dependências.
+
+- Configuração de rede feita pelo docker-compose.yml.
+
+## Integração entre os Serviços
+
+### Tenista-service
+Responde com uma lista de tenistas:
+
+<b>Endpoint</b>:
+```
+GET /tenistas
+```
+
+<b>Saída esperada</b>:
+```
+[
+  { "id": 1, "nome": "Rafael Nadal", "virou_profissional": "2001" },
+  { "id": 2, "nome": "Roger Federer", "virou_profissional": "1998" }
+]
+
+```
+
+### Premiacao-service
+Responde com uma lista de premiações:
+
+<b>Endpoint</b>:
+```
+GET /premiacoes
+```
+
+<b>Saída esperada</b>:
+```
+[
+    {"id": 101, "usuario_id": 1, "premiacao_carreira": 112500000},
+    {"id": 102, "usuario_id": 2, "premiacao_carreira": 108800000},
+]
+```
+- O api-gateway integra esses serviços ao expor endpoints externos:
+
+    - /tenistas → proxy direto para a lista de tenistas.
+
+    - /premiacoes → proxy direto para a lista de premiações.
+## 🛠️ Execução do Desafio
+### 2.5.1 Vá para o diretório do desafio
+``` bash
+cd desafio5
+```
+### 2.5.2 Suba os containers com Docker Compose
+``` bash
+docker compose up --build
+```
+
+### 2.5.3 Liste tenistas (via gateway)
+Acesse: 
+```
+http://localhost:8080/tenistas
+```
+
+### 2.5.4 Liste premiações (via gateway)
+Acesse: 
+```
+http://localhost:8080/premiacoes
+```
+
+### 2.5.5 Encerre os serviços
+```
+docker compose down
+```
+</details>
+
