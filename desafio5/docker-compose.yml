@@ -1,0 +1,34 @@
+version: "3.9"
+
+services:
+  tenista-service:
+    build: ./tenistaServico
+    container_name: tenista-service
+    networks:
+      - desafio5_net
+
+  premiacao-service:
+    build: ./premiacaoServico
+    container_name: premiacao-service
+    networks:
+      - desafio5_net
+
+  api-gateway:
+    build: ./apigateway
+    container_name: api-gateway
+    depends_on:
+      - tenista-service
+      - premiacao-service
+    environment:
+      TENISTA_SERVICE_HOST: tenista-service
+      TENISTA_SERVICE_PORT: 5001
+      PREMIACAO_SERVICE_HOST: premiacao-service
+      PREMIACAO_SERVICE_PORT: 5002
+    ports:
+      - "8080:8080"
+    networks:
+      - desafio5_net
+
+networks:
+  desafio5_net:
+    driver: bridge
