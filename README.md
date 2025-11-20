@@ -475,8 +475,8 @@ GET /premiacoes
 <b>Saída esperada</b>:
 ```
 [
-    {"id": 101, "usuario_id": 1, "premiacao_carreira": 112500000},
-    {"id": 102, "usuario_id": 2, "premiacao_carreira": 108800000},
+    {"id": 101, "tenista_id": 1, "premiacao_carreira": 112500000},
+    {"id": 102, "tenista_id": 2, "premiacao_carreira": 108800000},
 ]
 ```
 - O api-gateway integra esses serviços ao expor endpoints externos:
