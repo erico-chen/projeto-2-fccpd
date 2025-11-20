@@ -33,7 +33,6 @@ Integração dos microsserviços por meio de um gateway central, responsável po
 ```
 .
 ├── desafio1
-├── desafio2
 ├── desafio3
 ├── desafio4
 └── desafio5
@@ -41,6 +40,7 @@ Integração dos microsserviços por meio de um gateway central, responsável po
 
 
 ## Como executar o projeto
+
 ### 1. Clone o repositório
 ``` bash
 git clone https://github.com/erico-chen/projeto-2-fccpd.git
@@ -50,7 +50,15 @@ git clone https://github.com/erico-chen/projeto-2-fccpd.git
 <details closed>
 <summary>Desafio 1</summary>
 <br>
+Este desafio demonstra como dois containers Docker podem se comunicar entre si através de uma rede customizada.
+A ideia principal é simular dois serviços independentes:
 
+- Servidor (service A): expõe uma rota HTTP simples usando Python/Flask.
+
+- Cliente (service B): executa periodicamente requisições HTTP para o servidor usando requests.
+
+Ambos os serviços são colocados dentro da mesma rede Docker, o que permite ao cliente acessar o servidor pelo nome do container (ex.: http://server:8080).
+Isso mostra que, dentro de uma rede Docker, os containers funcionam como se estivessem em uma “LAN privada”, com DNS interno e isolamento do host.
 ## 🛠️ Execução do Desafio
 ### 2.1.1 Vá para o diretório do desafio
 ``` bash
@@ -99,7 +107,18 @@ docker network inspect [SEU_NOME_REDE]
 <details closed>
 <summary>Desafio 2</summary>
 <br>
+Este desafio demonstra persistência de dados no Docker usando volumes.
+A proposta é executar um container PostgreSQL e armazenar seus dados em um volume chamado desafio2_db.
 
+Dessa forma:
+
+- Mesmo que o container seja removido (docker rm),
+
+- Mesmo que você suba outro container novo,
+
+- Mesmo que atualize a imagem,
+
+os dados continuam existindo, porque o volume está fora do ciclo de vida do container.
 ## 🛠️ Execução do Desafio
 ### 2.2.1 Crie um volume Docker
 ``` bash
